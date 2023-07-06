@@ -1,0 +1,67 @@
+.App {
+  text-align: center;
+}
+
+.flex{
+  display:flex;
+  gap:10px;
+  align-items: center;
+}
+
+.keyboard-row, .word-guess-row{
+  margin: 12px 0;
+}
+
+.keyboard-row{
+  justify-content: center;
+}
+
+.letter-tile{
+  width:50px;
+  border:1px solid black;
+  height:50px;
+}
+
+.keyboard,.word-guess-container{
+  margin: 30px auto;
+  
+}
+
+.word-guess-container{
+  width:20%;
+}
+
+.keyboard{
+  width:35%;
+  
+}
+
+.keyboard-tile{
+  background-color: #7c7c80;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.correctPosStyle{
+background-color: green;
+}
+
+.correctLetterStyle{
+background-color: orange;
+}
+
+.incorrectLetterStyle{
+background-color: grey;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
