@@ -20,6 +20,7 @@
   width:50px;
   border:1px solid black;
   height:50px;
+  background-color: white;;
 }
 
 .keyboard,.word-guess-container{
@@ -44,14 +45,17 @@
 
 .correctPosStyle{
 background-color: green;
+height:50px;
 }
 
 .correctLetterStyle{
 background-color: orange;
+height:50px;
 }
 
 .incorrectLetterStyle{
 background-color: grey;
+height:50px;
 }
 
 .App-header {

@@ -1,53 +1,71 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+// const initialState = {
+//   iscorrectPos: false,
+//   iscorrectLetter: false,
+//   isincorrectLetter: false,
+// };
+
 function App() {
-  const [guessWord, setGuessWord] = useState("");
+  const [guess, setGuess] = useState([]);
   const [guessList, setGuessList] = useState([]);
   const [chance, setChance] = useState(0);
   const [letter, setLetter] = useState("");
 
-  const [style, setStyle] = useState({
-    iscorrectPos: false,
-    iscorrectLetter: false,
-    isincorrectLetter: false,
-  });
-
   const correctWord = "STORM";
 
-  const handleMatchLetters = () => {
-    if (correctWord.includes(letter)) {
-      if (correctWord.indexOf(letter) === guessWord.indexOf(letter)) {
-        setStyle({...style, iscorrectPos: true})
+  const handleMatchLetters = (newGuess) => {
+    let ind = newGuess.length - 1;
+    let letterObj = newGuess[ind];
+    if (correctWord.includes(letterObj.letter)) {
+      if (correctWord[ind] === letterObj.letter) {
+        newGuess[ind] = { ...letterObj, correctPos: true };
       } else {
-        setStyle({...style, iscorrectLetter: true})
+        newGuess[ind] = { ...letterObj, includedOnly: true };
       }
     } else {
-      setStyle({...style, isincorrectLetter: true})
+      newGuess[ind] = { ...letterObj, notIncluded: true };
     }
+    return newGuess;
   };
 
   const handleAddLetter = (letter) => {
-    // alert([...guessWord],letter)
-    let word = guessWord != "" ? [...guessWord].join("") : "";
-
-    if (word.length <= 5) {
-      setLetter(letter);
-      word += letter;
-      setGuessWord(word);
-    }
-    if (word.length === 5) {
-      setGuessWord("");
-      setChance(chance + 1);
-      let arr1 = [...guessList];
-      arr1.push(word);
-      setGuessList([...arr1]);
+    let newGuess = guess.length === 5 ? [] : [...guess];
+    let result;
+    if (newGuess.map((obj) => obj.letter).join("").length < 5) {
+      newGuess.push({
+        letter,
+        correctPos: false,
+        includedOnly: false,
+        notIncluded: false,
+      });
+      result = handleMatchLetters(newGuess);
+      console.log("result", result);
+      setGuess([...result]);
+      // if (newGuess.map((obj) => obj.letter).join("").length === 5) {
+      //   let newArr = [...guessList];
+      //   newArr.push(result);
+      //   setGuessList([...newArr]);
+      // }
     }
   };
 
   useEffect(() => {
-    if(letter!="")handleMatchLetters()}, [letter]);
+    let word= guess.map((obj) => obj.letter).join("")
+    if (word.length === 5) {
+      let newArr = [...guessList];
+      newArr.push(guess);
+      if(word===correctWord){
+        alert('Congratulations!! You guessed the correct word...')
+      }
+      setGuessList([...newArr]);
+      setGuess([]);
+    }
+    
+  }, [guess.length]);
 
+  // console.log(guessList);
   return (
     <div className="App">
       <>
@@ -55,27 +73,51 @@ function App() {
           <h1>Wordle</h1>
         </header>
         <section className="word-guess-container">
-          {[0, 1, 2, 3, 4, 5].map((wordIndex) => {
+          {[0, 1, 2, 3, 4, 5].map((rowIndex) => {
             return (
-              <div className="word-guess-row flex">
+              <div className="word-guess-row flex" key={rowIndex}>
                 {[0, 1, 2, 3, 4].map((i) => {
                   return (
-                    <div
-                      className={`letter-tile ${
-                        chance === wordIndex && style.iscorrectPos
-                          ? "correctPosStyle"
-                          : style.iscorrectLetter
-                          ? "correctLetterStyle"
-                          : style.isincorrectLetter
-                          ? "incorrectLetterStyle"
-                          : ""
-                      }`}
-                    >
-                      {chance === wordIndex
-                        ? guessWord[i]
-                        : guessList[wordIndex]
-                        ? guessList[wordIndex][i]
-                        : ""}
+                    <div className="letter-tile" key={i}>
+                      {/* {console.log(guessList?.length === rowIndex
+                          ? guess[i]?.letter ?? "": guessList[rowIndex] ? guessList[rowIndex][i]?.letter ?? "" : ""
+                          )} */}
+
+                      {guessList?.length === rowIndex ? (
+                        <div
+                          className={
+                            guess[i]?.correctPos
+                              ? "correctPosStyle"
+                              : guess[i]?.includedOnly
+                              ? "correctLetterStyle"
+                              : "incorrectLetterStyle"
+                          }
+                        >
+                          {guess[i]?.letter ?? ""}
+                        </div>
+                      ) : guessList[rowIndex] ? (
+                        <div
+                          className={
+                            guessList[rowIndex][i]?.correctPos
+                              ? "correctPosStyle"
+                              : guessList[rowIndex][i]?.includedOnly
+                              ? "correctLetterStyle"
+                              : "incorrectLetterStyle"
+                          }
+                        >
+                        {guessList[rowIndex][i]?.letter ?? ""}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      {/* <div>
+                        {(guessList[rowIndex])?
+                        guessList[rowIndex][i]?.letter ?? ""
+                        :
+                        rowIndex===0 || guessList[rowIndex-1] ? guess[i]?.letter : ""
+                      }
+                      </div> */}
                     </div>
                   );
                 })}
