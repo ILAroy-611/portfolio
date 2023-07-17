@@ -90,7 +90,7 @@ function App() {
                               ? "correctPosStyle"
                               : guess[i]?.includedOnly
                               ? "correctLetterStyle"
-                              : "incorrectLetterStyle"
+                              : guess[i]?.notIncluded ? "incorrectLetterStyle" : "noword-tile"
                           }
                         >
                           {guess[i]?.letter ?? ""}

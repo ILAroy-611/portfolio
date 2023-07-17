@@ -58,6 +58,11 @@ background-color: grey;
 height:50px;
 }
 
+.noword-tile{
+  height:50px;
+  background-color: white;;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
